@@ -1,0 +1,17 @@
+# Python & Virtualenv
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+
+# Gmail Credentials and Tokens (NEVER COMMIT)
+credentials.json
+token.json
+.env
+
+# Output logs and summaries
+daily_summaries/
+logs/

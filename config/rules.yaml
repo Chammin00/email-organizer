@@ -1,0 +1,237 @@
+# Email Organizer Rules Configuration
+# Optimized default rules for automated daily email triage
+version: "1.0"
+
+settings:
+  label_prefix: "Organizer"        # Nested prefix for labels, e.g. "Organizer/Newsletters"
+  default_search_query: "is:inbox" # Default scope for daily triage
+  max_fetch_limit: 100             # Scans up to 100 emails per daily run
+  summary_dir: "daily_summaries"   # Where daily digest markdown files are saved
+
+categories:
+  # Priority 1: Malicious scam, phishing, extortion, and fake renewal alerts (auto-moved to Trash)
+  - name: "Scam-Phishing"
+    description: "Fraudulent messages, fake renewal invoices, lottery scams, and phishing attempts"
+    priority: 1
+    rules:
+      subject_contains:
+        - "geek squad"
+        - "mcafee renewal"
+        - "norton 360"
+        - "lottery winner"
+        - "claim your prize"
+        - "beneficiary fund"
+        - "inheritance fund"
+        - "webcam recorded"
+        - "bitcoin wallet"
+        - "compromised password"
+        - "suspended within 24 hours"
+        - "account suspension notice"
+        - "metamask alert"
+        - "trust wallet security"
+        - "wire transfer notification"
+        - "unauthorized transaction detected call"
+        - "crypto deposit pending"
+        - "gift card winner"
+      from_contains: []
+    actions:
+      add_labels: ["Scam-Phishing"]
+      archive: true
+      mark_read: true
+      trash: true                  # Automatically moves message to Gmail Trash (retained 30 days in Bin)
+
+  # Priority 2: Important family, children, school, and household communications
+  - name: "Family-Hamilton"
+    description: "Important mail regarding Chance, Chandler, Reign, Hamilton (school, teachers, family, household)"
+    priority: 2
+    rules:
+      subject_contains:
+        - "chance"
+        - "chandler"
+        - "reign"
+        - "ezra hamilton"
+        - "hamilton residence"
+        - "progress report"
+        - "assessment results"
+        - "grading notification"
+        - "parent consent"
+        - "field trip"
+        - "bolin blast"
+        - "allen isd"
+      from_contains:
+        - "allenisd.org"
+        - "rmoreland.009@gmail.com"
+      snippet_contains:
+        - "chance ezra"
+        - "chance hamilton"
+        - "chandler"
+        - "reign"
+        - "hamilton residence"
+        - "allen isd"
+      exclude_subject_contains:
+        - "last chance"
+        - "second chance"
+        - "a chance to"
+        - "stand a chance"
+        - "don't miss your chance"
+        - "final chance"
+        - "had a chance"
+        - "chance to win"
+        - "your chance to"
+        - "take a chance"
+        - "give yourself a chance"
+        - "sweepstakes"
+      exclude_from_contains:
+        - "tipranks.com"
+        - "samsclub.com"
+        - "nytdirect@nytimes.com"
+        - "temuemail.com"
+        - "taraenergy.com"
+        - "wayfair.com"
+        - "citi.com"
+        - "synchrony.com"
+        - "ginafortexas.com"
+    actions:
+      add_labels: ["Family-Hamilton"]
+      archive: false               # NEVER archive family/school mail; keep in Inbox
+      mark_read: false
+
+
+  # Priority 3: High-priority items that need immediate human action
+  - name: "Action-Needed"
+    description: "Urgent, bills due, or high-priority messages requiring immediate attention"
+    priority: 3
+    rules:
+      subject_contains:
+        - "action required"
+        - "action needed"
+        - "urgent"
+        - "asap"
+        - "deadline"
+        - "important notice"
+        - "requires your attention"
+        - "bill is due"
+        - "payment due"
+        - "past due"
+        - "response required"
+        - "confirm your appointment"
+      from_contains: []
+    actions:
+      add_labels: ["Action-Needed"]
+      archive: false               # NEVER archive action items; keep front and center in Inbox
+      mark_read: false
+
+  # Priority 4: Bills, invoices, receipts, taxes, and bank alerts
+  - name: "Finance"
+    description: "Invoices, receipts, order confirmations, and banking alerts"
+    priority: 4
+    rules:
+      from_contains:
+        - "stripe.com"
+        - "paypal.com"
+        - "billing@"
+        - "receipts@"
+        - "invoice"
+        - "bank"
+        - "chase.com"
+        - "amex.com"
+        - "fidelity.com"
+        - "vanguard.com"
+        - "wells fargo"
+        - "capital one"
+      subject_contains:
+        - "receipt"
+        - "invoice"
+        - "payment received"
+        - "payment confirmation"
+        - "order confirmation"
+        - "your order has shipped"
+        - "statement available"
+        - "bill is ready"
+        - "direct deposit"
+        - "auto-pay scheduled"
+        - "tax document"
+        - "1099"
+        - "w-2"
+    actions:
+      add_labels: ["Finance"]
+      archive: false               # Keep in inbox for tracking orders and bills
+      mark_read: false
+
+
+  # Priority 5: Commercial sales, deals, coupons, and marketing promotions
+  - name: "Promotions"
+    description: "Sales, marketing campaigns, discounts, coupons, and retail offers"
+    priority: 5
+    rules:
+      subject_contains:
+        - "% off"
+        - "special offer"
+        - "flash sale"
+        - "black friday"
+        - "cyber monday"
+        - "discount code"
+        - "exclusive deal"
+        - "ends tonight"
+        - "sale on"
+        - "save big"
+        - "coupon"
+        - "clearance"
+        - "limited time"
+        - "free shipping"
+        - "deal of the day"
+      from_contains: []
+    actions:
+      add_labels: ["Promotions"]
+      archive: true                # Automatically archive out of inbox
+      mark_read: false
+
+  # Priority 6: Subscriptions, blogs, curated publications, and newsletters
+  - name: "Newsletters"
+    description: "Subscribed publications, tech blogs, and curated digests"
+    priority: 6
+    rules:
+      from_contains:
+        - "substack.com"
+        - "medium.com"
+        - "morningbrew.com"
+        - "tldr.tech"
+        - "hackernewsletter"
+        - "newsletter@"
+      subject_contains:
+        - "weekly digest"
+        - "daily digest"
+        - "newsletter"
+        - "roundup"
+        - "edition #"
+        - "issue #"
+        - "pre-market brief"
+      has_header:
+        - "List-Unsubscribe"       # Catch any remaining mass mailers with unsubscribe headers
+    actions:
+      add_labels: ["Newsletters"]
+      archive: true                # Auto-archive to keep inbox clean
+      mark_read: false
+
+  # Priority 7: System notifications, GitHub, cloud alerts, calendar invites
+  - name: "Notifications"
+    description: "Automated alerts, code repository updates, and login notices"
+    priority: 7
+    rules:
+      from_contains:
+        - "notifications@github.com"
+        - "no-reply@"
+        - "noreply@"
+        - "accounts.google.com"
+        - "gitlab.com"
+        - "jira@"
+      subject_contains:
+        - "security alert"
+        - "new sign-in"
+        - "verification code"
+        - "pull request"
+        - "assigned to you"
+    actions:
+      add_labels: ["Notifications"]
+      archive: false
+      mark_read: false

@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "email-organizer": {
+      "command": "C:\\Users\\chase\\.venvs\\email-organizer\\Scripts\\python.exe",
+      "args": ["-m", "email_organizer.cli", "serve-mcp"],
+      "env": {
+        "PYTHONPATH": "G:\\My Drive\\Antigravity\\Projects\\email organizer\\src",
+        "PYTHONIOENCODING": "utf-8"
+      }
+    }
+  }
+}
